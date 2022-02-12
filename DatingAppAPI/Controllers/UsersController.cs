@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using DatingAppAPI.Data;
@@ -34,6 +35,28 @@ namespace DatingAppAPI.Controllers
         public async Task<ActionResult<MemberDto>> GetUser(string username){
 
             return Ok(await _userRepository.GetMemberAsync(username));
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto){
+
+            //get username from token claims.
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            //get user by username.
+            var user = await _userRepository.GetUserByUsernameAsync(username);
+
+            //map memberupdatedto to appuser.
+            _mapper.Map(memberUpdateDto, user);
+
+            //update user.
+            _userRepository.Update(user);
+
+            //if saveallasync is successful then return no content since in frontend we are already showing the updated member.
+            if(await _userRepository.SaveAllAsync()) return NoContent();
+
+            return BadRequest("Failed to update user.");
+            
         }
     }
 }

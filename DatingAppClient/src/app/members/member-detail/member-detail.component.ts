@@ -24,12 +24,12 @@ export class MemberDetailComponent implements OnInit {
       imagePercent: 100,
       thumbnailsColumns: 4,
       imageAnimation: NgxGalleryAnimation.Slide,
-      preview: false 
+      preview: false
     }]
   }
-  getImages(): NgxGalleryImage[]{
+  getImages(): NgxGalleryImage[] {
     const imageUrls = [];
-    for(const photo of this.member.photos){
+    for (const photo of this.member?.photos) {
       imageUrls.push({
         small: photo?.url,
         medium: photo?.url,
@@ -38,11 +38,10 @@ export class MemberDetailComponent implements OnInit {
     }
     return imageUrls;
   }
-  loadMember(){
-    this.memberService.GetMember(this.route.snapshot.paramMap.get('username')).subscribe(member => 
-      {
-        this.member = member;
-        this.galleryImages = this.getImages();
-      });
+  loadMember() {
+    this.memberService.GetMember(this.route.snapshot.paramMap.get('username')).subscribe(member => {
+      this.member = member;
+      this.galleryImages = this.getImages();
+    });
   }
 }
