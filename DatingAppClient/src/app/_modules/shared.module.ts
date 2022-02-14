@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
+import { FileUploadModule } from 'ng2-file-upload';
 
 
 
@@ -15,8 +16,7 @@ import { NgxGalleryModule } from '@kolkov/ngx-gallery';
       positionClass:'toast-bottom-right'
     }),
     TabsModule.forRoot(),
-    NgxGalleryModule
-    
+    NgxGalleryModule,
   ],
   exports:[
     BsDropdownModule,

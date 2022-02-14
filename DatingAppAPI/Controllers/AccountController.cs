@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using DatingAppAPI.Entities;
 using DatingAppAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+
 namespace DatingAppAPI.Controllers
 {
     public class AccountController : BaseApiController
@@ -48,7 +50,9 @@ namespace DatingAppAPI.Controllers
         {
 
             //Find the user by username.
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
+            var user = await _context.Users
+            .Include(p=>p.Photos)
+            .SingleOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
 
             //validate user exist or not.
             if (user == null) return Unauthorized("Invalid Username");
@@ -68,7 +72,8 @@ namespace DatingAppAPI.Controllers
             //if computed hash equals to the db user password has then user is valid and return the user.
             return new UserDto{
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
             };
         }
 
