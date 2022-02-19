@@ -8,6 +8,7 @@ using DatingAppAPI.Entities;
 using DatingAppAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using AutoMapper;
 
 namespace DatingAppAPI.Controllers
 {
@@ -15,8 +16,10 @@ namespace DatingAppAPI.Controllers
     {
         private readonly DataContext _context;
         private readonly ITokenService _tokenService;
-        public AccountController(DataContext context, ITokenService tokenService)
+        public IMapper _mapper { get; }
+        public AccountController(DataContext context, ITokenService tokenService, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
             _tokenService = tokenService;
         }
@@ -27,20 +30,22 @@ namespace DatingAppAPI.Controllers
         {
 
             if (await UserExists(registerDto.Username)) return BadRequest("Username already taken");
+
+            var user = _mapper.Map<AppUser>(registerDto);
             //using is used dispose the instance of HMACSHA512 when it finishes its work
             using var hmac = new HMACSHA512();
 
-            var user = new AppUser
-            {
-                UserName = registerDto.Username.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                PasswordSalt = hmac.Key
-            };
+            user.UserName = registerDto.Username.ToLower();
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
+            user.PasswordSalt = hmac.Key;
+
             _context.Add(user);
             await _context.SaveChangesAsync();
-            return new UserDto{
+            return new UserDto
+            {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                KnownAs = user.KnownAs
             };
         }
 
@@ -51,7 +56,7 @@ namespace DatingAppAPI.Controllers
 
             //Find the user by username.
             var user = await _context.Users
-            .Include(p=>p.Photos)
+            .Include(p => p.Photos)
             .SingleOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
 
             //validate user exist or not.
@@ -70,10 +75,12 @@ namespace DatingAppAPI.Controllers
             }
 
             //if computed hash equals to the db user password has then user is valid and return the user.
-            return new UserDto{
+            return new UserDto
+            {
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user),
-                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
+                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url,
+                KnownAs = user.KnownAs
             };
         }
 

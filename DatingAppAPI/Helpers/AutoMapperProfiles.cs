@@ -19,6 +19,8 @@ namespace DatingAppAPI.Helpers
 
             //map from memberupdatedto to appuser
             CreateMap<MemberUpdateDto, AppUser>();
+            //map from registerDto to appuser
+            CreateMap<RegisterDto, AppUser>();
         }
     }
 }
