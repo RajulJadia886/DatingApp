@@ -20,10 +20,12 @@ namespace DatingAppAPI.Entities
         public string City {get; set;}
         public string Country {get; set;}
         public ICollection<Photo> Photos {get; set;}
+        // app user can have liked users to whom he has liked.
+        public ICollection<UserLike> LikedUsers { get; set; }
+        //app user can be liked by other users.
+        public ICollection<UserLike> LikedByUsers { get; set; }
 
-        // public int GetAge(){
-        //     return DateOfBirth.CalculateAge();
-        // }
+        
 
     }
 }
