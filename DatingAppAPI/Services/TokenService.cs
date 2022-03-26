@@ -22,7 +22,8 @@ namespace DatingAppAPI.Services
         {
             //1. Identify the claims that you want put as a part of your token.
             var claims = new List<Claim>{
-                new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
+                new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
             };
 
             //2. Create signing credentials.
