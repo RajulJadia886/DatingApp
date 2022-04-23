@@ -24,8 +24,7 @@ namespace DatingAppAPI.Entities
         public ICollection<UserLike> LikedUsers { get; set; }
         //app user can be liked by other users.
         public ICollection<UserLike> LikedByUsers { get; set; }
-
-        
-
+        public ICollection<Message> MessagesSent { get; set; }
+        public ICollection<Message> MessagesReceived { get; set; }
     }
 }
