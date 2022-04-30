@@ -7,6 +7,10 @@ using DatingAppAPI.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using System.Linq;
+
 namespace DatingAppAPI.Services
 {
     public class TokenService : ITokenService
@@ -15,17 +19,21 @@ namespace DatingAppAPI.Services
         verify the token i.e the same key is used to encrypt and decrypt the electronic information.
         */
         private readonly SymmetricSecurityKey _key;
-        public TokenService(IConfiguration config){
+        private readonly UserManager<AppUser> _userManager;
+     
+        public TokenService(IConfiguration config, UserManager<AppUser> userManager){
+            _userManager = userManager;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
         }
-        public string CreateToken(AppUser user)
+        public async Task<string> CreateToken(AppUser user)
         {
             //1. Identify the claims that you want put as a part of your token.
             var claims = new List<Claim>{
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
             };
-
+            var roles = await _userManager.GetRolesAsync(user); 
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             //2. Create signing credentials.
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 

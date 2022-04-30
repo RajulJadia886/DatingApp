@@ -27,6 +27,11 @@ import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { DateInputComponent } from './_forms/date-input/date-input.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
+import { AdminpanelComponent } from './admin/adminpanel/adminpanel.component';
+import { HasRoleDirective } from './_directives/has-role.directive';
+import { UsermanagementComponent } from './admin/usermanagement/usermanagement.component';
+import { PhotomanagementComponent } from './admin/photomanagement/photomanagement.component';
+import { RolesModalComponent } from './modals/roles-modal/roles-modal.component';
 
 
 @NgModule({
@@ -47,7 +52,12 @@ import { MemberMessagesComponent } from './members/member-messages/member-messag
     PhotoEditorComponent,
     TextInputComponent,
     DateInputComponent,
-    MemberMessagesComponent
+    MemberMessagesComponent,
+    AdminpanelComponent,
+    HasRoleDirective,
+    UsermanagementComponent,
+    PhotomanagementComponent,
+    RolesModalComponent
   ],
   imports: [
     BrowserModule,
