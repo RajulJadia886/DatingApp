@@ -68,12 +68,7 @@ namespace DatingAppAPI.Data
             .Include(p => p.Photos)
             .ToListAsync();
         }
-
-        public  async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
-        }
-
+        
         public void Update(AppUser user)
         {
             //Entity framework attaches a flag to the entity that it has been modified.
