@@ -53,7 +53,7 @@ namespace DatingAppAPI
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
-            .WithOrigins("https://localhost:4200"));
+            .WithOrigins("*"));
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseDefaultFiles();
