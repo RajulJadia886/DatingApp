@@ -53,7 +53,7 @@ namespace DatingAppAPI
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
-            .WithOrigins("*"));
+            .WithOrigins("https://connectforgood.herokuapp.com"));
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseDefaultFiles();
