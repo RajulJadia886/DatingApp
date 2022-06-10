@@ -44,8 +44,9 @@ namespace DatingAppAPI.Extensions
                     var pgHost = pgHostPort.Split(":")[0];
                     var pgPort = pgHostPort.Split(":")[1];
                     var pgSSL = "Require";
+                    var pgCert = "true";
 
-                    connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};SSL Mode={pgSSL};";
+                    connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};SSL Mode={pgSSL};Server Certificate={pgCert};";
                 }
                 options.UseNpgsql(connStr);
             });
